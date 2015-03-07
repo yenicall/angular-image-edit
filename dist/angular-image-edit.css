@@ -1,0 +1,16 @@
+.ng-image-edit {
+  text-align: center;
+  margin: 0 auto;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.ng-image-edit .wrapper {
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 auto;
+  border: 1px dashed #000000;
+}
+.ng-image-edit .wrapper .canvas {
+  cursor: move;
+}

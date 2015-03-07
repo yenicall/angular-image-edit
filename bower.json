@@ -1,0 +1,31 @@
+{
+  "name": "angular-image-edit",
+  "version": "0.1.0",
+  "authors": [
+    "Pedro Mangabeira <pedro@easy-guild.net>"
+  ],
+  "description": "An angular directive to crop and resize images",
+  "main": "dist/angular-image-edit.js",
+  "keywords": [
+    "angular",
+    "image",
+    "crop",
+    "resize"
+  ],
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/yenicall/angularimageedit",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "*"
+  },
+  "dependencies": {
+    "angular-superswipe": "~0.0.2",
+    "angular-touch": "*"
+  }
+}

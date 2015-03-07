@@ -1,0 +1,107 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Test</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-touch/angular-touch.js"></script>
+    <script src="../bower_components/angular-superswipe/superswipe.js"></script>
+    <link rel="stylesheet" href="../dist/angular-image-edit.css">
+    <script>
+        var myApp = null;
+        (function () {
+
+            angular.module('myApp', ['ImageEdit'])
+                    .directive('ngFileUpload', function ($parse, $sce) {
+                        'use strict';
+                        return {
+                            restrict: 'A',
+                            link: function (scope, elements, attrs) {
+                                var expressionHandler = $parse(attrs.ngFileUpload),
+                                        input = document.createElement('input'),
+                                        element = elements[0];
+                                input.setAttribute('type', 'file');
+                                input.setAttribute('accept', 'image/*');
+                                input.style.visibility = 'hidden';
+                                input.style.position = 'absolute';
+                                element.appendChild(input);
+                                element.addEventListener('click', function () {
+                                    input.click();
+                                }, false);
+                                input.addEventListener('change', function (evt) {
+                                    var reader = new FileReader;
+                                    reader.onload = function (e) {
+                                        expressionHandler(scope, {file: e.target.result});
+                                    };
+                                    reader.readAsDataURL(evt.target.files[0]);
+                                    input.value = null;
+                                }, false);
+                            }
+                        };
+                    })
+                    .controller('MainController', function ($rootScope, $scope) {
+                        $scope.zoom = 0;
+                        $scope.upload = function (file) {
+                            $scope.$apply(function () {
+                                $scope.src = file;
+                            })
+
+                        };
+                        $scope.crop = function () {
+                            $rootScope.$broadcast("ImageEdit:edit");
+                        };
+                        $scope.$on("ImageEdit:done", function (e, data) {
+                                $scope.cropped = data.uri;
+                        });
+                        $scope.$on("ImageEdit:loaded", function (event, width, height) {
+                            console.log("Picture size : " + width + "x" + height);
+                        });
+                        $scope.$on("ImageEdit:loadFail", function () {
+                            console.log("grrr")
+                        })
+
+                    });
+
+        })();
+    </script>
+    <!-- REQUIRED 3/3 - the image crop directive -->
+    <script src="../dist/angular-image-edit.js"></script>
+    <style>
+        /* Styles for this demo page */
+        body {
+            font-size: 12px;
+            font-family: Helvetica, Arial;
+            background: white;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+    </style>
+<body>
+<div ng-controller="MainController">
+    <h2>Angular Image Edit</h2>
+    <hr>
+    <button ng-file-upload="upload(file)">upload</button>
+    <button ng-click="crop()">Crop</button>
+    <image-edit width="194" height="120" src="src" zoom="zoom"></image-edit>
+    <input type="range" min="0" max="100" ng-model="zoom"/>
+
+
+    <hr>
+    <h2>Result</h2>
+
+    <div>
+        <img ng-src="{{cropped}}" alt="The Cropped Image">
+
+        <p>And this is the actual data uri which represents the cropped image, which you'll then upload to your
+            server:</p>
+        <textarea class="result-datauri">{{cropped}}</textarea>
+    </div>
+
+</div>
+</body>
+</html>
