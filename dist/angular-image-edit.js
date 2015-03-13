@@ -1,3 +1,9 @@
+/*! angular-image-edit - version 0.2.1 - 13-03-2015
+ * An angular directive to crop and resize images
+ * Copyright (c) 2015 Pedro Mangabeira <pedro@easy-guild.net> 
+ * Licensed under the MIT
+*/
+
 (function () {
     /**
      * @ngdoc overview
