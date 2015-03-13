@@ -1,6 +1,6 @@
 {
   "name": "angular-image-edit",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "authors": [
     "Pedro Mangabeira <pedro@easy-guild.net>"
   ],
@@ -23,9 +23,5 @@
   ],
   "devDependencies": {
     "angular": "*"
-  },
-  "dependencies": {
-    "angular-superswipe": "~0.0.2",
-    "angular-touch": "*"
   }
 }

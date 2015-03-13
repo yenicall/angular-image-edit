@@ -1,9 +1,3 @@
-/*! angular-image-edit - version 0.1.1 - 08-03-2015
- * An angular directive to crop and resize images
- * Copyright (c) 2015 Pedro Mangabeira <pedro@easy-guild.net> 
- * Licensed under the MIT
-*/
-
 (function () {
     /**
      * @ngdoc overview
@@ -13,8 +7,22 @@
      * Use an image, resize it, move it to fit in a specific size  and get the blob/data URI, that you can use to upload wherever and however you want
      *
      */
-    angular.module('ImageEdit', ['ngTouch', 'superswipe'])
-        .directive('imageEdit', ['$rootScope', '$q', '$swipe', 'canvasToBlob', function ($rootScope, $q, $swipe, canvasToBlob) {
+    angular.module('ImageEdit', [])
+        .directive('imageEdit', ['$rootScope', '$q', 'canvasToBlob', function ($rootScope, $q, canvasToBlob) {
+
+            function getCoordinates(event) {
+                var touches = event.touches && event.touches.length ? event.touches : [event];
+                var e = (event.changedTouches && event.changedTouches[0]) ||
+                    (event.originalEvent && event.originalEvent.changedTouches &&
+                    event.originalEvent.changedTouches[0]) ||
+                    touches[0].originalEvent || touches[0];
+
+                return {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+            }
+
             return {
                 template: '<div id="image-crop-{{ rand }}" class="ng-image-edit" ng-style="moduleStyles" ng-show="imageLoaded">' +
                 '<section ng-style="sectionStyles" class="wrapper">' +
@@ -24,6 +32,7 @@
                 restrict: 'AE',
                 link: function (scope, element, attributes) {
                     var $elm = element[0],
+                        active = false,
                         $canvas = $elm.getElementsByClassName('canvas')[0],
                         ctx = $canvas.getContext('2d'),
                         $img = new Image(),
@@ -184,24 +193,43 @@
                     };
 
                     //------------ Events ------------//
-
-                    $swipe.bind(angular.element($canvas), {
-                        start: function (coords) {
+                    var handleStart = function (event) {
+                            active = true;
+                            var coords = getCoordinates(event);
                             startCoords.x = coords.x;
                             startCoords.y = coords.y;
                         },
-                        move: function (coords) {
-                            var
+                        handleMove = function (event) {
+                            if (!active) return;
+                            event.preventDefault();
+                            var coords = getCoordinates(event),
                                 deltaX = (coords.x - startCoords.x) * maxZoomedInLevel,
                                 deltaY = (coords.y - startCoords.y) * maxZoomedInLevel;
                             moveImage(deltaX, deltaY);
                         },
-                        end: function (coords) {
-                            var deltaX = (coords.x - startCoords.x) * maxZoomedInLevel,
+                        handleEnd = function (event) {
+                            if (!active) return;
+                            active = false;
+                            var coords = getCoordinates(event),
+                                deltaX = (coords.x - startCoords.x) * maxZoomedInLevel,
                                 deltaY = (coords.y - startCoords.y) * maxZoomedInLevel;
                             moveImage(deltaX, deltaY);
-                        }
-                    });
+                        },
+                        handleCancel = function () {
+                            active = false;
+                        };
+
+                    $canvas.addEventListener('mousedown', handleStart, false);
+                    $canvas.addEventListener('mousemove', handleMove, false);
+                    $canvas.addEventListener('mouseup', handleEnd, false);
+
+
+                    $canvas.addEventListener('touchstart', handleStart, false);
+                    $canvas.addEventListener('touchmove', handleMove, false);
+                    $canvas.addEventListener('touchend', handleEnd, false);
+                    $canvas.addEventListener('touchcancel', handleCancel, false);
+
+
                     scope.$on("ImageEdit:edit", function (event) {
                         if (event) {
                             event.preventDefault();

@@ -8,13 +8,13 @@ Install
 
 Copy the angular-image-edit.js and angular-image-edi.css files into your project and add the following line with the correct path:
 
-		<script src="/path/to/scripts/angular-image-edi.js"></script>
-		<link rel="stylesheet" href="/path/to/scripts/angular-image-edi.css">
+		<script src="/path/to/scripts/angular-image-edit.js"></script>
+		<link rel="stylesheet" href="/path/to/scripts/angular-image-edit.css">
 
 
 Alternatively, if you're using bower, you can add this to your component.json (or bower.json):
 
-		"angular-image-edit": "~0.1.1"
+		"angular-image-edit": "~0.2.0"
 
 Or simply run
 
@@ -23,8 +23,6 @@ Or simply run
 Check the dependencies to your html (unless you're using wiredep):
 
 		<script src="components/angular/angular.js"></script>
-		<script src="components/angular-touch/angular-touch.js"></script>
-		<script src="components/angular-superswipe/superswipe.js"></script>
 
 And (unless you're using wiredep):
 
