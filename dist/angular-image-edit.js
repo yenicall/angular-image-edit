@@ -56,10 +56,10 @@
                     scope.rand = Math.round(Math.random() * 99999);
                     scope.width = parseInt(attributes.width, 10) || 300;
                     scope.height = parseInt(attributes.height, 10) || 300;
-
+                    scope.type = attributes.type || "png";
                     scope.canvasWidth = scope.width;
                     scope.canvasHeight = scope.height;
-
+                    scope.type = attributes.type || "png";
                     scope.moduleStyles = {
                         width: (scope.width) + 'px',
                         height: (scope.height ) + 'px'
